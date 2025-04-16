@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>心理健康分析系统</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link.active,
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 6rem auto 2rem;
+            padding: 0 2rem;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .analysis-card {
+            background: var(--surface);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .upload-section {
+            background: var(--surface);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+            border: 2px dashed #e2e8f0;
+            transition: border-color 0.3s ease;
+        }
+
+        .upload-section.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-button {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .visualization {
+            height: 400px;
+            background: var(--surface);
+            border-radius: 1.5rem;
+            margin-top: 2rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-effect {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, var(--primary), transparent);
+            opacity: 0.1;
+            animation: wave 20s linear infinite;
+        }
+
+        @keyframes wave {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <div class="brand">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a2 2 0 0 0-3 15.52 1 1 0 0 0 0 1.98A2 2 0 0 0 12 22a2 2 0 0 0 3-6.48 1 1 0 0 0 0-1.98A2 2 0 0 0 12 2z"/>
+                    <path d="M12 10v4"/>
+                </svg>
+                <span>心理分析系统</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">首页</a>
+                <a href="#analysis" class="nav-link">实时分析</a>
+                <a href="#history" class="nav-link">历史记录</a>
+                <a href="#settings" class="nav-link">个性设置</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="dashboard-grid">
+            <div class="analysis-card">
+                <h2>视频情绪分析</h2>
+                <p class="text-secondary">上传视频文件进行微表情分析</p>
+                <div class="upload-section" id="videoUpload">
+                    <input type="file" accept="video/*" hidden id="videoInput">
+                    <button class="upload-button" onclick="document.getElementById('videoInput').click()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 4v16m-8-8h16"/>
+                        </svg>
+                        上传视频
+                    </button>
+                </div>
+            </div>
+
+            <div class="analysis-card">
+                <h2>语音情绪分析</h2>
+                <p class="text-secondary">上传音频文件进行声纹分析</p>
+                <div class="upload-section" id="audioUpload">
+                    <input type="file" accept="audio/*" hidden id="audioInput">
+                    <button class="upload-button" onclick="document.getElementById('audioInput').click()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 4v16m-8-8h16"/>
+                        </svg>
+                        上传音频
+                    </button>
+                </div>
+            </div>
+
+            <div class="analysis-card">
+                <h2>文本情绪分析</h2>
+                <p class="text-secondary">直接输入文字进行语义分析</p>
+                <div class="upload-section">
+                    <textarea id="textInput" placeholder="输入你的文字..." 
+                              style="width: 100%; height: 100px; padding: 1rem; border: none; 
+                                     background: transparent; resize: none;"></textarea>
+                    <button class="upload-button" onclick="analyzeText()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M5 13l4 4L19 7"/>
+                        </svg>
+                        立即分析
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="visualization">
+            <div class="wave-effect"></div>
+            <h3>实时情绪波动可视化</h3>
+            <!-- 这里可以添加ECharts图表 -->
+        </div>
+    </main>
+
+    <script>
+        // 拖放文件处理
+        function setupDragDrop(uploadArea, inputElement) {
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                inputElement.files = e.dataTransfer.files;
+                showAnalysis();
+            });
+        }
+
+        // 初始化拖放功能
+        setupDragDrop(document.getElementById('videoUpload'), document.getElementById('videoInput'));
+        setupDragDrop(document.getElementById('audioUpload'), document.getElementById('audioInput'));
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 动态导航高亮
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function analyzeText() {
+            const text = document.getElementById('textInput').value;
+            // 添加分析逻辑
+            console.log('分析文本:', text);
+        }
+
+        function showAnalysis() {
+            // 显示分析界面逻辑
+            window.location.hash = '#analysis';
+        }
+    </script>
+</body>
+</html>

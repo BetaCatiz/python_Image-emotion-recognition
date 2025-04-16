@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>心理健康分析系统</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #4f46e5;
+            --accent-color: #818cf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .decorative-blur {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--primary-color);
+            filter: blur(100px);
+            opacity: 0.1;
+            border-radius: 50%;
+        }
+
+        .decorative-blur:nth-child(1) {
+            top: -20%;
+            right: -10%;
+            background: #4f46e5;
+        }
+
+        .decorative-blur:nth-child(2) {
+            bottom: -20%;
+            left: -10%;
+            background: #818cf8;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 440px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: height 0.4s ease;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            width: 60px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.2));
+        }
+
+        .form-switch {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .switch-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            color: #64748b;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .switch-btn.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .switch-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .auth-form {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            position: absolute;
+            width: 100%;
+        }
+
+        .auth-form.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            transition: color 0.3s;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-input:focus + .input-icon {
+            color: var(--primary-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .additional-links {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #64748b;
+        }
+
+        .additional-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                width: 90%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decorative-blur"></div>
+    <div class="decorative-blur"></div>
+
+    <div class="auth-container" id="authContainer">
+        <div class="auth-header">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMkEyIDIgMCAwIDAgOSAxNy41MmExIDEgMCAwIDAgMCAxLjk4QTIgMiAwIDAgMCAxMiAyMkEyIDIgMCAwIDAgMTUgNi40OEExIDEgMCAwIDAgMTUgNC41IDIgMiAwIDAgMCAxMiAyWiIvPjxwYXRoIGQ9Ik0xMiAxMHY0Ii8+PC9zdmc+" 
+                 alt="Logo" class="logo">
+            <h1>心理健康分析系统</h1>
+        </div>
+
+        <div class="form-switch">
+            <button class="switch-btn active" onclick="switchForm('login')">登录</button>
+            <button class="switch-btn" onclick="switchForm('register')">注册</button>
+        </div>
+
+        <!-- 登录表单 -->
+        <form class="auth-form active" id="loginForm">
+            <div class="input-group">
+                <i class="input-icon">👤</i>
+                <input type="email" class="form-input" placeholder="电子邮箱" required>
+            </div>
+            <div class="input-group">
+                <i class="input-icon">🔒</i>
+                <input type="password" class="form-input" placeholder="密码" required>
+            </div>
+            <button type="submit" class="submit-btn">立即登录</button>
+            <p class="additional-links">忘记密码？<a href="#">重置密码</a></p>
+        </form>
+
+        <!-- 注册表单 -->
+        <form class="auth-form" id="registerForm">
+            <div class="input-group">
+                <i class="input-icon">👤</i>
+                <input type="text" class="form-input" placeholder="用户名" required>
+            </div>
+            <div class="input-group">
+                <i class="input-icon">✉️</i>
+                <input type="email" class="form-input" placeholder="电子邮箱" required>
+            </div>
+            <div class="input-group">
+                <i class="input-icon">🔒</i>
+                <input type="password" class="form-input" placeholder="密码（至少8位）" minlength="8" required>
+            </div>
+            <button type="submit" class="submit-btn">立即注册</button>
+            <p class="additional-links">已有账号？<a href="#" onclick="switchForm('login')">立即登录</a></p>
+        </form>
+    </div>
+
+    <script>
+        function switchForm(formType) {
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const switchBtns = document.querySelectorAll('.switch-btn');
+        const animationDuration = 300; // 与CSS过渡时间保持一致
+
+        // 移除所有按钮激活状态
+        switchBtns.forEach(btn => btn.classList.remove('active'));
+        
+        // 设置当前按钮激活状态
+        document.querySelector(`[onclick="switchForm('${formType}')"]`).classList.add('active');
+
+        // 当前表单和即将显示的表单
+        const currentForm = loginForm.classList.contains('active') ? loginForm : registerForm;
+        const targetForm = formType === 'login' ? loginForm : registerForm;
+
+        // 如果已经是当前表单则不执行切换
+        if (currentForm === targetForm) return;
+
+        // 先隐藏当前表单
+        currentForm.classList.remove('active');
+        setTimeout(() => {
+            // 显示目标表单
+            targetForm.classList.add('active');
+        }, animationDuration);
+    }
+
+        // 表单提交处理
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                // 后续添加实际提交逻辑
+                alert('表单提交成功！');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>
