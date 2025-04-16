@@ -1,0 +1,16 @@
+# use glob syntax.
+syntax: glob
+
+output/
+netbeans
+*.gz
+tmp
+target/
+lib_managed/
+src_managed/
+project/boot/
+*~
+*.iml
+out/
+.idea/
+.idea
